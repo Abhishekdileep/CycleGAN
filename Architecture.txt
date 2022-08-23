@@ -1,0 +1,10 @@
+Generator 
+2 Downsampling Layers 
+A few residual (ResNet) Blocks 
+Upsample 2 layer 
+Maping to RGB sample 
+
+Discriminator 
+    4 CNN layer 
+        Stride value - 2 
+    Idea Name : PatchGAN
