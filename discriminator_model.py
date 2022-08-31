@@ -3,7 +3,7 @@ import torch.nn as nn
 
 '''
     Class Block 
-        Holds the Convolution NN block that can be chained further to create the discriminator 
+        Holds the Convolution NN block that can be chained further to create the discriminator with instanceNorm2d and LeakyRelu 
         for the CycleGAN
 '''
 
@@ -11,12 +11,12 @@ class Block(nn.Module) :
     def __init__(self , in_channels , out_channels , stride ):
         super().__init__()
         self.conv = nn.Sequential(
-            nn.Conv2d(in_channels , out_channels , 4 , stride , 1 , bais=True , padding_mode="reflect"),
+            nn.Conv2d(in_channels , out_channels , 4 , stride , 1  , padding_mode="reflect" , bias=True),
             nn.InstanceNorm2d(out_channels), 
             nn.LeakyReLU(0.2)
         )
 
-    def foward(self, x):
+    def forward(self, x):
         return self.conv(x)
 
 class Discriminator(nn.Module):
@@ -49,13 +49,14 @@ class Discriminator(nn.Module):
         return torch.sigmoid(self.model(x))
 
 def test():
-    x = torch.randn((1,3,256,256))
+    x = torch.randn((5,3,256,256))
     model = Discriminator(in_channels=3)
     preds = model(x)
     print("Model :" , model )
     print("Shape :" , preds.shape)    
 
-
+if __name__ == "__main__" :
+    test()
 
 
     
