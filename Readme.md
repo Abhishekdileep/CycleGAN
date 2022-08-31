@@ -24,19 +24,15 @@
 
             Cycle Consistency 
 
-
-
-
-Discriminator 
-    4 CNN layer 
+    Discriminator 
+        4 CNN layer 
         Stride value - 2 
-    Idea Name : PatchGAN
-    Used Instance Normalization - Takes each channel and sample singularly [imagine weights as a 3-d box , with Height 
+        Used Instance Normalization - Takes each channel and sample singularly [imagine weights as a 3-d box , with Height 
                                     , width as one dimension and number of samples as one dimension , channel as another 
                                     then channel and number of samples imagine one singular box top to bottom from there]
-Generator 
-    2 Downsampling Layers 
-    A few residual (ResNet) Blocks 
-    Upsample 2 layer 
-    last - Maping to RGB sample 
+    Generator 
+        2 Downsampling Layers 
+        A few residual (ResNet) Blocks 
+        Upsample 2 layer 
+        last - Maping to RGB sample 
 '''
