@@ -17,7 +17,7 @@ def train_fn(disc_H, disc_Z, gen_Z , gen_H , loader , opt_disc , opt_gen , l1, m
     for idx, (zebra, horse) in enumerate(loop):
         zebra = zebra.to(config.DEVICE)
         horse = horse.to(config.DEVICE)
-        #for discriminator
+
         with torch.cuda.amp.autocast():
             fake_horse = gen_H(zebra)
             D_H_real = disc_H(horse)
@@ -39,7 +39,7 @@ def train_fn(disc_H, disc_Z, gen_Z , gen_H , loader , opt_disc , opt_gen , l1, m
         d_scaler.scale(D_loss).backward()
         d_scaler.step(opt_disc)
         d_scaler.update()
-        #for generator H and Z 
+
 def main():
     disc_H = Discriminator(in_channels=3).to(config.DEVICE)
     disc_Z = Discriminator(in_channels=3).to(config.DEVICE)
