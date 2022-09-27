@@ -11,8 +11,34 @@ from torchvision.utils import save_image
 from discriminator_model import Discriminator 
 from generator_model import Generator 
 
-def train_fn():
-    pass 
+def train_fn(disc_H, disc_Z, gen_Z , gen_H , loader , opt_disc , opt_gen , l1, mse , d_scaler , g_scaler ):
+    loop = tqdm(loader , leave=True)
+
+    for idx, (zebra, horse) in enumerate(loop):
+        zebra = zebra.to(config.DEVICE)
+        horse = horse.to(config.DEVICE)
+
+        with torch.cuda.amp.autocast():
+            fake_horse = gen_H(zebra)
+            D_H_real = disc_H(horse)
+            D_H_fake = disc_H(fake_horse.detach())
+            D_H_real_loss = mse(D_H_real, torch.ones_like(D_H_real))
+            D_H_fake_loss = mse(D_H_fake, torch.zeros_like(D_H_fake))
+            D_H_loss = D_H_fake_loss + D_H_real_loss
+
+            fake_zebra = gen_Z(horse)
+            D_Z_real = disc_Z(zebra)
+            D_Z_fake = disc_Z(fake_zebra.detach())
+            D_Z_real_loss = mse(D_Z_real, torch.ones_like(z_Z_real))
+            D_Z_fake_loss = mse(D_Z_fake, torch.zeros_like(D_Z_fake))
+            D_Z_loss = D_Z_fake_loss + D_Z_real_loss
+
+            D_loss = (D_H_loss + D_Z_loss)/2
+        
+        opt_disc.zero_grad()
+        d_scaler.scale(D_loss).backward()
+        d_scaler.step(opt_disc)
+        d_scaler.update()
 
 def main():
     disc_H = Discriminator(in_channels=3).to(config.DEVICE)
